@@ -46,8 +46,55 @@ def mergeSort(unsortedData):
             k += 1
     return unsortedData
 
+# Quicksort Performance: O(nlogn), worst case O(n^2) - generally better than Mergesort, but can be worse
+# Performs in place, doesn't use extra memory
+
+
+def quickSort(unsortedData, first, last):
+    if first < last:
+        # caclulate split point
+        pivotIdx = partition(unsortedData, first, last)
+
+        # sort two partitions
+        quickSort(unsortedData, first, pivotIdx-1)
+        quickSort(unsortedData, pivotIdx+1, last)
+
+
+def partition(unsortedData, first, last):
+    # first item is the pivot value
+    pivot = unsortedData[first]
+    lower = first+1
+    upper = last
+
+    # search for the crossing point
+    done = False
+    while not done:
+        # advance lower index
+        while lower <= upper and unsortedData[lower] <= pivot:
+            lower += 1
+        # advance upper index
+        while unsortedData[upper] >= pivot and upper >= lower:
+            upper -= 1
+        # if two indexes cross, found split point
+        if upper < lower:
+            done = True
+        else:
+            temp = unsortedData[lower]
+            unsortedData[lower] = unsortedData[upper]
+            unsortedData[upper] = temp
+    # after finding split point, exchange pivot value
+    temp = unsortedData[first]
+    unsortedData[first] = unsortedData[upper]
+    unsortedData[upper] = temp
+
+    # return split point index
+    return upper
+
 
 unsortedData1 = [0, 6, 20, 8, 19, 56, 23, 87, 41, 49, 53]
 print(bubbleSort(unsortedData1))
 unsortedData2 = [0, 6, 20, 8, 19, 56, 23, 87, 41, 49, 53]
 print(mergeSort(unsortedData2))
+unsortedData3 = [0, 6, 20, 8, 19, 56, 23, 87, 41, 49, 53]
+quickSort(unsortedData3, 0, len(unsortedData3)-1)
+print(unsortedData3)
